@@ -172,7 +172,7 @@ public class MoneyTransferTest {
         var amount = 500;
 
         DashboardPage.transferToFromAmount(firstCardId, secondCardId, String.valueOf(amount));
-        DashboardPage.getErrorNotification().shouldHave(text("Failed_test_for check_CI_Ошибка! Произошла ошибка"), Duration.ofMillis(15000));
+        DashboardPage.getErrorNotification().shouldHave(text("Ошибка! Произошла ошибка"), Duration.ofMillis(15000));
     }
 
 
