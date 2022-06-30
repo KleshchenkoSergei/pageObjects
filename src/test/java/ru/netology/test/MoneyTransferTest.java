@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
+import ru.netology.page.TransferPage;
 
 import java.time.Duration;
 
@@ -18,22 +19,16 @@ public class MoneyTransferTest {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.getAuthInfo(); // vasya / qwerty123
         var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // 12345
         verificationPage.validVerify(verificationCode);
 
-        var DashboardPage = new DashboardPage();
-        var firstCardId = "5559 0000 0000 0001";
-        var secondCardId = "5559 0000 0000 0002";
-        var amount = 500;
-        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-
-        DashboardPage.transferToFromAmount(firstCardId, secondCardId, String.valueOf(amount));
-
-        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance + amount);
-        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance - amount);
+        var amount = 500;//amount for transfer
+        var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
+        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
+        transferPage.validation(cardInfoTo, startCardBalance, amount);
     }
 
     @Test
@@ -41,24 +36,17 @@ public class MoneyTransferTest {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.getAuthInfo(); // vasya / qwerty123
         var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // 12345
         verificationPage.validVerify(verificationCode);
 
-        var DashboardPage = new DashboardPage();
-        var firstCardId = "5559 0000 0000 0001";
-        var secondCardId = "5559 0000 0000 0002";
-        var amount = 500;
-        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-
-        DashboardPage.transferToFromAmount(secondCardId, firstCardId, String.valueOf(amount));
-
-        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance - amount);
-        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance + amount);
+        var amount = 500;//amount for transfer
+        var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
+        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
+        transferPage.validation(cardInfoTo, startCardBalance, amount);
     }
-
 
 
     @Test
@@ -66,25 +54,16 @@ public class MoneyTransferTest {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.getAuthInfo(); // vasya / qwerty123
         var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // 12345
         verificationPage.validVerify(verificationCode);
 
-        var DashboardPage = new DashboardPage();
-        var firstCardId = "5559 0000 0000 0001";
-        var secondCardId = "5559 0000 0000 0002";
-        var amount = -500;
-        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-
-        DashboardPage.transferToFromAmount(firstCardId, secondCardId, String.valueOf(amount));
-
-        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance + Math.abs(amount));
-        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance - Math.abs(amount));
-
-        System.out.println(firstCardStartBalance);
-        System.out.println(secondCardStartBalance);
+        var amount = -500;//amount for transfer
+        var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
+        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
+        transferPage.validation(cardInfoTo, startCardBalance, Math.abs(amount));
     }
 
     @Test
@@ -92,87 +71,32 @@ public class MoneyTransferTest {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.getAuthInfo(); // vasya / qwerty123
         var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // 12345
         verificationPage.validVerify(verificationCode);
 
-        var DashboardPage = new DashboardPage();
-        var firstCardId = "5559 0000 0000 0001";
-        var secondCardId = "5559 0000 0000 0002";
-        var amount = 0;
-        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-
-        DashboardPage.transferToFromAmount(secondCardId, firstCardId, String.valueOf(amount));
-
-        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance - amount);
-        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance + amount);
+        var amount = 0;//amount for transfer
+        var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
+        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
+        transferPage.validation(cardInfoTo, startCardBalance, amount);
     }
-
-//    @Test // Not solved bug, comments for good CI
-//    void shouldTransferMoneyFromSecondToFirstCardNoMoney() {
-//        open("http://localhost:9999");
-//        var loginPage = new LoginPage();
-//
-//        var authInfo = DataHelper.getAuthInfo();
-//        var verificationPage = loginPage.validLogin(authInfo);
-//        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-//        verificationPage.validVerify(verificationCode);
-//
-//        var DashboardPage = new DashboardPage();
-//        var firstCardId = "5559 0000 0000 0001";
-//        var secondCardId = "5559 0000 0000 0002";
-//        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-//        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-//        var amount = Math.round(secondCardStartBalance * 1.1);
-//
-//        DashboardPage.transferToFromAmount(firstCardId, secondCardId, String.valueOf(amount));
-//
-//        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance);
-//        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance);
-//    }
-
-//    @Test // Not solved bug, comments for good CI
-//    void shouldTransferMoneyFromFirstToSecondCardNoMoney() {
-//        open("http://localhost:9999");
-//        var loginPage = new LoginPage();
-//
-//        var authInfo = DataHelper.getAuthInfo();
-//        var verificationPage = loginPage.validLogin(authInfo);
-//        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-//        verificationPage.validVerify(verificationCode);
-//
-//        var DashboardPage = new DashboardPage();
-//        var firstCardId = "5559 0000 0000 0001";
-//        var secondCardId = "5559 0000 0000 0002";
-//        var firstCardStartBalance = DashboardPage.getCardBalance(firstCardId);
-//        var secondCardStartBalance = DashboardPage.getCardBalance(secondCardId);
-//        var amount = Math.round(firstCardStartBalance * 1.1);
-//
-//        DashboardPage.transferToFromAmount(secondCardId, firstCardId, String.valueOf(amount));
-//
-//        assertEquals(DashboardPage.getCardBalance(firstCardId), firstCardStartBalance);
-//        assertEquals(DashboardPage.getCardBalance(secondCardId), secondCardStartBalance);
-//    }
 
     @Test
     void shouldTransferMoneyFromWrongSecondToFirstCard() {
         open("http://localhost:9999");
         var loginPage = new LoginPage();
 
-        var authInfo = DataHelper.getAuthInfo();
+        var authInfo = DataHelper.getAuthInfo(); // vasya / qwerty123
         var verificationPage = loginPage.validLogin(authInfo);
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // 12345
         verificationPage.validVerify(verificationCode);
 
-        var DashboardPage = new DashboardPage();
-        var firstCardId = "5559 0000 0000 0001";
-        var secondCardId = "5559 0001 0000 0002";
-        var amount = 500;
-
-        DashboardPage.transferToFromAmount(firstCardId, secondCardId, String.valueOf(amount));
-        DashboardPage.getErrorNotification().shouldHave(text("Ошибка! Произошла ошибка"), Duration.ofMillis(15000));
+        var amount = 500;//amount for transfer
+        var cardInfoTo = DataHelper.getCardInfoWrongToFirst(); // transfer to wrong first from second card
+        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = DashboardPage.choiceTransferWrongTo(cardInfoTo, amount);
     }
 
 
