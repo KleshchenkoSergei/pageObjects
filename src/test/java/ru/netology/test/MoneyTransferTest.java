@@ -4,11 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
-import ru.netology.page.TransferPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,10 +21,13 @@ public class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
 
         var amount = 500;//amount for transfer
+        var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
-        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
-        transferPage.validation(cardInfoTo, startCardBalance, amount);
+        var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
+        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
     }
 
     @Test
@@ -42,10 +41,13 @@ public class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
 
         var amount = 500;//amount for transfer
+        var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
-        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
-        transferPage.validation(cardInfoTo, startCardBalance, amount);
+        var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
+        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
     }
 
 
@@ -60,10 +62,13 @@ public class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
 
         var amount = -500;//amount for transfer
+        var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
-        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
-        transferPage.validation(cardInfoTo, startCardBalance, Math.abs(amount));
+        var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
+        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + Math.abs(amount));
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - Math.abs(amount));
     }
 
     @Test
@@ -77,10 +82,13 @@ public class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
 
         var amount = 0;//amount for transfer
+        var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
-        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = DashboardPage.choiceTransferTo(cardInfoTo, amount);
-        transferPage.validation(cardInfoTo, startCardBalance, amount);
+        var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
+        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
+        assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
     }
 
     @Test
@@ -94,9 +102,11 @@ public class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
 
         var amount = 500;//amount for transfer
+        var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoWrongToFirst(); // transfer to wrong first from second card
-        var startCardBalance = DashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = DashboardPage.choiceTransferWrongTo(cardInfoTo, amount);
+        var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
+        var transferPage = dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        dashboardPage.verification("Ошибка! Произошла ошибка");
     }
 
 
