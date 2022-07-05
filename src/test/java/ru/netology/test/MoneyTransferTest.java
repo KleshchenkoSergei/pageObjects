@@ -24,11 +24,13 @@ public class MoneyTransferTest {
         var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
         var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
-        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        var choiceTo = dashboardPage.choiceTransferTo(cardInfoTo);
+        choiceTo.moneyTransfer(cardInfoTo, amount);
 
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
     }
+
 
     @Test
     void shouldTransferMoneyFromFirstToSecondCardEnough() {
@@ -44,7 +46,8 @@ public class MoneyTransferTest {
         var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
         var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
-        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        var choiceTo = dashboardPage.choiceTransferTo(cardInfoTo);
+        choiceTo.moneyTransfer(cardInfoTo, amount);
 
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
@@ -65,7 +68,8 @@ public class MoneyTransferTest {
         var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToFirst(); // transfer to first from second card
         var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
-        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        var choiceTo = dashboardPage.choiceTransferTo(cardInfoTo);
+        choiceTo.moneyTransfer(cardInfoTo, amount);
 
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + Math.abs(amount));
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - Math.abs(amount));
@@ -85,7 +89,8 @@ public class MoneyTransferTest {
         var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoToSecond(); // transfer to second from first card
         var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
-        dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        var choiceTo = dashboardPage.choiceTransferTo(cardInfoTo);
+        choiceTo.moneyTransfer(cardInfoTo, amount);
 
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdTo()), startCardBalance[0] + amount);
         assertEquals(dashboardPage.getCardBalance(cardInfoTo.getCardIdFrom()), startCardBalance[1] - amount);
@@ -105,7 +110,8 @@ public class MoneyTransferTest {
         var dashboardPage = new DashboardPage();
         var cardInfoTo = DataHelper.getCardInfoWrongToFirst(); // transfer to wrong first from second card
         var startCardBalance = dashboardPage.getStartBalance(cardInfoTo);
-        var transferPage = dashboardPage.choiceTransferTo(cardInfoTo, amount);
+        var choiceTo = dashboardPage.choiceTransferTo(cardInfoTo);
+        choiceTo.moneyTransfer(cardInfoTo, amount);
         dashboardPage.verification("Ошибка! Произошла ошибка");
     }
 

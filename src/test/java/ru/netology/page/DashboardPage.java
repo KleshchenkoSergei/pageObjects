@@ -14,9 +14,6 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class DashboardPage {
     private SelenideElement heading = $("[data-test-id=dashboard]");
-    private SelenideElement amount = $("[data-test-id=amount] [class=input__control]");
-    private SelenideElement from = $("[data-test-id=from] [class=input__control]");
-    private SelenideElement actionTransferButton = $("[data-test-id=\"action-transfer\"]");
     private ElementsCollection cards = $$(".list__item div");
     private SelenideElement errorNotification = $("[data-test-id=\"error-notification\"] [class=\"notification__content\"]");
 
@@ -39,13 +36,9 @@ public class DashboardPage {
         return startBalance;
     }
 
-    public TransferPage choiceTransferTo(DataHelper.CardInfoTo cardInfo, int amountValue) {
+    public TransferPage choiceTransferTo(DataHelper.CardInfoTo cardInfo) {
 
         $(byXpath(".//*[contains(text(), '**** **** **** " + cardInfo.getCardIdTo().substring(15) + "\')]/button")).click();
-
-        amount.setValue(String.valueOf(amountValue));
-        from.setValue(cardInfo.getCardIdFrom());
-        actionTransferButton.click();
 
         return new TransferPage();
     }
